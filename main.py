@@ -1,4 +1,6 @@
 import booste
 from sys import argv
 
-print(booste.yolov3(argv[1], 'proto','serv'))
+string = " ".join(argv[2:])
+
+print(booste.gpt2(string, argv[1]))
