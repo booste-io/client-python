@@ -4,26 +4,53 @@ import numpy as np
 import json
 import base64
 
-endpoint = 'https://booste-corporation-v3-flask.zeet.app'
+endpoint = 'https://booste-corporation-v3-flask.zeet.app/'
 # Endpoint override for development
 if 'BoosteDevMode' in os.environ:
-    endpoint = 'http://localhost'
+    endpoint = 'http://localhost/'
 
-def gpt2(in_string, length = 5, pretrained = True, model_id = None, user_id = None):
+def gpt2(in_string, length = 5, temperature = 0.8, pretrained = True, model_id = None, user_id = None):
     global endpoint
     route = 'inference/pretrained/gpt2'
-    url = os.path.join(endpoint, route)
+    url = endpoint + route
+    length = int(length)
+    batch_length = 50
+    sequence = []
+
+    # Loop batches until requested length is done
+    while True:
+        # adjust batch size to remainder for final loop
+        end = False
+        if len(sequence) + batch_length > length:
+            batch_length = length - len(sequence)
+            end = True
+        sequence_string = " ".join(sequence) # convert aggrigated output "sequence" into string
+        if len(sequence_string) > 0:
+            batch_string = in_string + " " + sequence_string # add aggrigated output onto original input
+        else: 
+            batch_string = in_string
+        batch_out = run_gpt2_batch(url, batch_string, batch_length, temperature)
+        for item in batch_out:
+            sequence.append(item)
+        if end:
+            break
+    return(sequence)
+
+
+def run_gpt2_batch(url, in_string, length, temperature):
+    sequence = []
     payload = {
         "string" : in_string,
-        "length" : str(length)
+        "length" : str(length),
+        "temperature" : str(temperature)
     }
     response = requests.post(url, json=payload)
     out = response.content.decode()
+
+    # Clean the out into list
     cleaned = str(out[2:len(out)-2])
-    print(cleaned)
     offset = 0
     word = ""
-    sequence = []
     for i in range(len(cleaned)):
         if i+offset < len(cleaned):
             if cleaned[i+offset] == '\\':
@@ -45,6 +72,11 @@ def gpt2(in_string, length = 5, pretrained = True, model_id = None, user_id = No
         word = ""
 
     return sequence
+
+
+
+
+
 
 # def yolov3(image_path, owner, model_name, labels, postprocess = True, obj_thresh = 0.5, nms_thresh = 0.5):
 #     global endpoint
