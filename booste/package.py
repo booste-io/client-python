@@ -9,12 +9,11 @@ endpoint = 'https://booste-corporation-v3-flask.zeet.app/'
 if 'BoosteDevMode' in os.environ:
     endpoint = 'http://localhost/'
 
-def gpt2(in_string, length = 5, temperature = 0.8, pretrained = True, model_id = None, user_id = None):
+def gpt2(in_string, length = 5, temperature = 0.8, batch_length = 20, window_max = 50, pretrained = True, model_id = None, user_id = None):
     global endpoint
     route = 'inference/pretrained/gpt2'
     url = endpoint + route
     length = int(length)
-    batch_length = 50
     sequence = []
 
     # Loop batches until requested length is done
@@ -29,7 +28,17 @@ def gpt2(in_string, length = 5, temperature = 0.8, pretrained = True, model_id =
             batch_string = in_string + " " + sequence_string # add aggrigated output onto original input
         else: 
             batch_string = in_string
+
+        # Reduce to max window size
+        
+        batch_sequence = batch_string.split(" ")
+        if len(batch_sequence) >= window_max:
+            end_index = len(batch_sequence)+1
+            batch_sequence = batch_sequence[end_index-window_max:end_index]
+        batch_string = " ".join(batch_sequence)
         batch_out = run_gpt2_batch(url, batch_string, batch_length, temperature)
+        if batch_out == None:
+            return None
         for item in batch_out:
             sequence.append(item)
         if end:
@@ -45,6 +54,9 @@ def run_gpt2_batch(url, in_string, length, temperature):
         "temperature" : str(temperature)
     }
     response = requests.post(url, json=payload)
+    if response.status_code != 200:
+        print("Error: Booste inference server returned status code", response.status_code)
+        return None
     out = response.content.decode()
 
     # Clean the out into list
