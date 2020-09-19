@@ -9,20 +9,6 @@ endpoint = 'https://booste-corporation-v3-flask.zeet.app/'
 if 'BoosteDevMode' in os.environ:
     endpoint = 'http://localhost/'
 
-
-# identify machine for blind use
-cache_path = os.path.abspath(os.path.join(os.path.expanduser('~'),".booste","cache.json"))
-if os.path.exists(cache_path):
-    with open(cache_path, "r") as file:
-        cache = json.load(file)
-else:
-    cache = {}
-    cache['machine_id'] = str(uuid4())
-    os.makedirs(os.path.join(os.path.expanduser('~'), ".booste"), exist_ok=True)
-    with open(cache_path, "w+") as file:
-        json.dump(cache, file)
-
-
 def gpt2(in_string, length = 5, temperature = 0.8, batch_length = 20, window_max = 50, pretrained = True, model_id = None, user_id = None):
     global endpoint
     route = 'inference/pretrained/gpt2'
@@ -61,13 +47,11 @@ def gpt2(in_string, length = 5, temperature = 0.8, batch_length = 20, window_max
 
 
 def run_gpt2_batch(url, in_string, length, temperature):
-    global cache
     sequence = []
     payload = {
         "string" : in_string,
         "length" : str(length),
-        "temperature" : str(temperature),
-        "machineID" : cache['machine_id']
+        "temperature" : str(temperature)
     }
     response = requests.post(url, json=payload)
     if response.status_code != 200:
