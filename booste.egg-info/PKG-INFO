@@ -1,6 +1,6 @@
 Metadata-Version: 1.1
 Name: booste
-Version: 0.1.2
+Version: 0.1.3
 Summary: The booste package is a python client to interact with your machine learning models hosted on Booste
 Home-page: https://www.booste.io
 Author: Erik Dunteman

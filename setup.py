@@ -3,7 +3,7 @@ import setuptools
 setup(
   name = 'booste',         # How you named your package folder (MyLib)
   packages = ['booste'],   # Chose the same as "name"
-  version = '0.1.3',      # Start with a small number and increase it with every change you make
+  version = '0.1.4',      # Start with a small number and increase it with every change you make
   license='MIT',        # Chose a license from here: https://help.github.com/articles/licensing-a-repository
   description = 'The booste package is a python client to interact with your machine learning models hosted on Booste',   # Give a short description about your library
   author = 'Erik Dunteman',                   # Type in your name
