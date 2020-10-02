@@ -2,11 +2,11 @@ import booste
 from sys import argv
 
 string = "hello, where is the golden"
-out = booste.gpt2(in_string = string, length = 35)
+out = booste.gpt2(api_key = "e24d28f3-5bd7-42ed-b00f-24540a8b40d6", in_string = string)
 
 print("\n{}".format(string))
 print(" ".join(out))
-print(len(out))
+
 
 # window_size = 7
 

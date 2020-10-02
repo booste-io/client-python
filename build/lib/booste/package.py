@@ -33,10 +33,9 @@ def gpt2(in_string, length = 5, temperature = 0.8, batch_length = 20, window_max
     # Loop batches until requested length is done
     while True:
         # adjust batch size to remainder for final loop
-        end = False
         if len(sequence) + batch_length > length:
-            batch_length = length - len(sequence)
-            end = True
+            batch_length = length - len(sequence) + 3 # Add 3 for extra buffer so there's not single word calls
+
         sequence_string = " ".join(sequence) # convert aggrigated output "sequence" into string
         if len(sequence_string) > 0:
             batch_string = in_string + " " + sequence_string # add aggrigated output onto original input
@@ -44,7 +43,6 @@ def gpt2(in_string, length = 5, temperature = 0.8, batch_length = 20, window_max
             batch_string = in_string
 
         # Reduce to max window size
-        
         batch_sequence = batch_string.split(" ")
         if len(batch_sequence) >= window_max:
             end_index = len(batch_sequence)+1
@@ -55,9 +53,11 @@ def gpt2(in_string, length = 5, temperature = 0.8, batch_length = 20, window_max
             return None
         for item in batch_out:
             sequence.append(item)
-        if end:
+
+        if len(sequence) >= length:
             break
-    return(sequence)
+
+    return(sequence[0:length]) #Return, and shave off any buffer from the last pass
 
 
 def run_gpt2_batch(url, in_string, length, temperature):

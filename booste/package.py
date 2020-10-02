@@ -7,6 +7,7 @@ import base64
 endpoint = 'https://booste-corporation-v3-flask.zeet.app/'
 # Endpoint override for development
 if 'BoosteDevMode' in os.environ:
+    print("Dev Mode")
     endpoint = 'http://localhost/'
 
 
@@ -22,8 +23,22 @@ else:
     with open(cache_path, "w+") as file:
         json.dump(cache, file)
 
+client_error = {
+    "OOB" : "Client error: {}={} is out of bounds.\n\tmin = {}\n\tmax = {}"
+}
 
-def gpt2(in_string, length = 5, temperature = 0.8, batch_length = 20, window_max = 50, pretrained = True, model_id = None, user_id = None):
+
+def gpt2(api_key, in_string, length = 5, temperature = 0.8, batch_length = 20, window_max = 50, pretrained = True, model_id = None):
+    
+    # Make sure request is valid
+    global client_error
+    if temperature < 0.1 or temperature > 1:
+        raise Exception(client_error['OOB'].format("temperature", temperature, "0.1", "1"))
+    if batch_length < 1 or batch_length > 50:
+        raise Exception(client_error['OOB'].format("batch_length", batch_length, "1", "50"))
+    if window_max < 1 or window_max > 200:
+        raise Exception(client_error['OOB'].format("window_max", window_max,   "1", "200"))
+
     global endpoint
     route = 'inference/pretrained/gpt2'
     url = endpoint + route
@@ -48,7 +63,7 @@ def gpt2(in_string, length = 5, temperature = 0.8, batch_length = 20, window_max
             end_index = len(batch_sequence)+1
             batch_sequence = batch_sequence[end_index-window_max:end_index]
         batch_string = " ".join(batch_sequence)
-        batch_out = run_gpt2_batch(url, batch_string, batch_length, temperature)
+        batch_out = run_gpt2_batch(url, api_key, batch_string, batch_length, temperature)
         if batch_out == None:
             return None
         for item in batch_out:
@@ -60,18 +75,20 @@ def gpt2(in_string, length = 5, temperature = 0.8, batch_length = 20, window_max
     return(sequence[0:length]) #Return, and shave off any buffer from the last pass
 
 
-def run_gpt2_batch(url, in_string, length, temperature):
+def run_gpt2_batch(url, api_key, in_string, length, temperature):
     global cache
     sequence = []
     payload = {
         "string" : in_string,
         "length" : str(length),
         "temperature" : str(temperature),
-        "machineID" : cache['machine_id']
+        "machineID" : cache['machine_id'],
+        "apiKey" : api_key
     }
     response = requests.post(url, json=payload)
     if response.status_code != 200:
         print("Error: Booste inference server returned status code", response.status_code)
+        print(response.json()['message'])
         return None
     out = response.content.decode()
 
