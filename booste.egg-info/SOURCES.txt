@@ -2,6 +2,7 @@ README.md
 setup.cfg
 setup.py
 booste/__init__.py
+booste/gpt2_utils.py
 booste/package.py
 booste.egg-info/PKG-INFO
 booste.egg-info/SOURCES.txt

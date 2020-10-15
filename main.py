@@ -1,20 +1,36 @@
 import booste
 from sys import argv
 
-string = "hello, where is the golden"
-out = booste.gpt2(api_key = "e24d28f3-5bd7-42ed-b00f-24540a8b40d6", in_string = string)
+string = """Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque eu vestibulum mauris, eget iaculis lacus. Aliquam vel odio est. Suspendisse potenti. Maecenas dignissim nec mi bibendum sagittis. Ut aliquam imperdiet sapien, nec finibus metus ultricies a. Cras porttitor, nisl vitae condimentum feugiat, nisl arcu tempor ante, at auctor metus justo a nisl. Integer aliquam enim eu vulputate porta. Vivamus dui elit, volutpat ut rhoncus in, molestie eu libero. Mauris vestibulum lacinia feugiat. Ut malesuada nisl at ipsum convallis vulputate. Quisque eget bibendum risus. Donec eget faucibus ligula.
 
-print("\n{}".format(string))
+Aliquam pulvinar urna sapien, ut euismod neque interdum vitae. Aenean ornare mauris ut ornare vulputate. Duis dapibus quis ipsum vitae varius. Curabitur scelerisque ut dui porta rutrum. Proin dignissim porttitor iaculis. Donec pharetra velit vel nulla imperdiet porta. Curabitur sodales orci gravida sem ullamcorper varius. Sed blandit finibus dui, sit amet malesuada ante viverra vitae. Proin pretium pellentesque orci, at cursus eros dictum consectetur. Ut mollis, odio quis dictum convallis, augue risus maximus tortor, a auctor eros nunc fermentum enim. Morbi lacus ipsum, facilisis a elementum nec, volutpat nec ex. Aliquam pharetra enim vitae risus faucibus, sit amet aliquet nunc vehicula. Curabitur id molestie magna. Pellentesque porta varius mauris in pellentesque.
+
+Donec malesuada scelerisque iaculis. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Proin vitae velit commodo, imperdiet lorem in, porta diam. In varius vel dolor vulputate malesuada. Ut vitae felis fringilla, porta lectus et, egestas neque. Vivamus cursus neque risus, at hendrerit ex ultrices vel. Nunc ultrices porta gravida. Etiam pulvinar blandit massa iaculis sodales. Praesent ex libero, maximus fringilla faucibus eget, ultricies vel ligula. Aenean feugiat est ligula, quis dapibus metus consequat et.
+
+Maecenas maximus est sed nisl tincidunt, vitae bibendum felis congue. Nullam tincidunt augue sit amet tellus fermentum pulvinar. Morbi ullamcorper vestibulum scelerisque. Sed vitae augue nisi. Maecenas luctus blandit purus eu convallis. Curabitur pulvinar mauris vel libero consectetur, ac mollis massa interdum. Donec a sem at nisi molestie gravida. Quisque et nisl velit. Proin sodales mauris tortor, vitae gravida eros euismod quis. Pellentesque volutpat accumsan nisl eu consectetur. Morbi aliquam ac orci quis finibus.
+
+Nullam tincidunt mi vitae nulla varius, eget facilisis massa vehicula. Curabitur malesuada metus et est rhoncus, vel dapibus mauris tristique. Suspendisse blandit elit tellus, sit amet porta massa vulputate sed. Maecenas congue efficitur lectus, vel ullamcorper nisl consequat in. Proin ultrices tristique dui, ac aliquet eros pretium convallis. Integer non libero eget lacus ultrices convallis sed vitae sapien. Suspendisse eget nisi eget leo aliquet vehicula. Proin ac magna a magna pellentesque accumsan et eget lectus.
+
+Curabitur id sem sapien. Aliquam convallis sodales dolor, at commodo augue consequat id. Sed ac mi ac mi rutrum facilisis ac ac elit. Nam varius, lectus sed aliquam molestie, dolor elit finibus orci, at bibendum eros tellus ut nunc. Integer vestibulum nunc eu mollis blandit. Ut aliquet lacinia orci vitae bibendum. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Phasellus augue nulla, hendrerit at venenatis id, hendrerit quis nunc. Proin mollis purus ut sapien luctus, eu bibendum metus vulputate. Suspendisse odio ligula, maximus in sem viverra, vulputate pretium enim. Sed venenatis, lectus eu iaculis efficitur, mi velit commodo nisi, vitae porta dolor tortor sit amet quam. Nullam eget tempus nibh.
+
+In varius augue dui, ut luctus justo bibendum at. Maecenas tempor nunc viverra, suscipit enim vel, ullamcorper velit. Donec faucibus commodo massa in hendrerit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce consequat dui ipsum, nec sollicitudin sapien dictum quis. Maecenas in nunc ex. Morbi sed iaculis nisl, quis sollicitudin metus. Nullam sem leo, ullamcorper id nulla quis, ornare lobortis est. Phasellus ultricies consequat enim at ultricies. Vestibulum finibus ligula ut pretium dignissim. Nulla porta, justo a volutpat vulputate, eros magna lobortis velit, et aliquet mi tellus in nulla.
+
+Maecenas placerat elit quis metus scelerisque accumsan. Nunc nec metus eros. Morbi non lectus vehicula sapien pretium eleifend aliquam faucibus sapien. Ut interdum nisi eget enim vulputate, in feugiat orci tempor. Proin nec ipsum id diam tempor imperdiet eget sit amet elit. Cras placerat sagittis sodales. Vestibulum aliquet, dui a rhoncus convallis, mi justo scelerisque est, sit amet ultrices orci mi finibus est. In hac habitasse platea dictumst.
+
+Proin et purus a ligula maximus venenatis. Nunc viverra congue tortor, nec lacinia ligula blandit vitae. Integer vel lorem id ligula pretium pharetra quis eu sapien. Nullam ac volutpat felis, a tincidunt sapien. Duis eu molestie sapien, ut maximus lectus. Duis dictum, leo sed tempus accumsan, mauris sem laoreet diam, et pellentesque dolor nunc non dui. Mauris ullamcorper urna nec sapien cursus, vel lacinia sapien accumsan. Maecenas rutrum tortor in pharetra sollicitudin. Aliquam quis egestas augue. Vestibulum vel ante eros. Sed tincidunt urna quis augue efficitur, non euismod dolor interdum. Curabitur tristique, nibh quis mollis venenatis, nulla nulla euismod lorem, ac rhoncus nibh nulla et quam. Nullam molestie dui sit amet velit pretium, eu congue sem fermentum. Integer ac ex iaculis, sollicitudin augue eget, fringilla augue. Cras ultricies nisl nec mi accumsan, vel auctor justo pretium.
+
+Vivamus placerat eu dui et porta. Integer efficitur ultrices dictum. Aenean finibus, massa id pulvinar consequat, lacus mi mollis massa, vel consequat augue justo in urna. Sed odio diam, viverra sed sapien hendrerit, consectetur blandit velit. Curabitur pellentesque velit enim, et scelerisque nulla ornare nec. Maecenas lacus ipsum, imperdiet vel luctus ut, semper vitae odio. Ut eu elit finibus neque molestie luctus id ut sem. Nullam in dui id turpis sagittis ornare ac sed odio. Ut sagittis ut ipsum ac facilisis.
+
+Praesent fringilla tortor quis nisi varius faucibus. Nulla a odio sit amet nisl auctor fringilla et tristique diam. Integer ut blandit eros. Praesent eu odio risus. Proin sed purus eu sapien mattis rutrum. In hac habitasse platea dictumst. Ut id sem sed est porta mollis sit amet eget turpis. Nunc tincidunt sapien purus, eget tristique leo varius pulvinar. Nam sodales a lorem sed laoreet. Sed pellentesque nulla in libero bibendum euismod.
+
+Sed tristique purus id tellus porttitor euismod. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Etiam quis neque at dui lobortis posuere nec sit amet magna. Nam congue in neque ut varius."""
+
+# out = booste.gpt2(api_key = "f1f22e45-8ae6-4658-911c-cb015014cc03", length=argv[1], in_string = string)
+# print("\ngpt call\n{}".format(string))
+# print(" ".join(out))
+
+string = "short test sentences are best"
+
+out = booste.gpt2(api_key = "f1f22e45-8ae6-4658-911c-cb015014cc03", length=argv[1], in_string = string, window_max=10)
+print("\ngpt call\n{}".format(string))
 print(" ".join(out))
-
-
-# window_size = 7
-
-# sequence = [0,1,2,3,4,5]
-# for i in range(100):
-#     sequence.append(sequence[-1]+1)
-#     if len(sequence) >= window_size:
-#         end_index = len(sequence)+1
-#         sequence = sequence[end_index-window_size:end_index]
-#     print(sequence)
-    
