@@ -1,6 +1,5 @@
 import os
 from uuid import uuid4
-import numpy as np
 import json
 import time
 from .gpt2_utils import gpt2_sync_main, gpt2_async_start_main, gpt2_async_check_main

@@ -4,3 +4,7 @@ dist/*
 .egg
 .pyc
 __pycache__
+
+# testing files
+demo*
+test*

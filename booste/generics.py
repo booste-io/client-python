@@ -1,18 +1,17 @@
-import numpy as np
 import requests
 import time
 import os
 import json
 from uuid import uuid4
 
-endpoint = 'https://booste-corporation-v3-flask.zeet.app/'
+endpoint = 'https://api.booste.io/'
 # Endpoint override for development
-if 'BoosteURL' in os.environ:
+if 'BOOSTE_URL' in os.environ:
     print("Dev Mode")
-    if os.environ['BoosteURL'] == 'local':
+    if os.environ['BOOSTE_URL'] == 'local':
         endpoint = 'http://localhost/'
     else:
-        endpoint = os.environ['BoosteURL']
+        endpoint = os.environ['BOOSTE_URL']
     print("Hitting endpoint:", endpoint)
 
 
@@ -38,25 +37,21 @@ client_error = {
 
 
 def run_main(api_key, model_key, model_parameters):
-    sync_mode = "synchronous"
-    task_id = call_start_api(api_key, model_key, model_parameters, sync_mode)
+    task_id = call_start_api(api_key, model_key, model_parameters)
     # Just hardcode intervals
-    interval, initial_wait = 1, 1
-    time.sleep(initial_wait)
     while True:
-        dict_out = call_check_api(api_key, task_id, sync_mode)
-        if dict_out['status'] == "finished":
-            return dict_out["output"]
-        if dict_out["status"] == "failed":
-            raise Exception("Server error: Booste inference job returned status 'failed'")
-        time.sleep(interval)
+        dict_out = call_check_api(api_key, task_id)
+        if dict_out['data']['taskStatus'] == "Done":
+
+            if "output" in dict_out['data']['taskOut']:
+                return dict_out['data']['taskOut']["output"]
+            else:
+                return dict_out['data']['taskOut']
 def start_main(api_key, model_key, model_parameters):
-    sync_mode = "asynchronous"
-    task_id = call_start_api(api_key, model_key, model_parameters, sync_mode)
+    task_id = call_start_api(api_key, model_key, model_parameters)
     return task_id
 def check_main(api_key, task_id):
-    sync_mode = "asynchronous"
-    dict_out = call_check_api(api_key, task_id, sync_mode)
+    dict_out = call_check_api(api_key, task_id)
     return dict_out
 
 
@@ -64,18 +59,19 @@ def check_main(api_key, task_id):
 # ________________________
 
 # Takes in start params, returns task ID
-def call_start_api(api_key, model_key, model_parameters, sync_mode):
+def call_start_api(api_key, model_key, model_parameters):
     global endpoint
-    route_start = 'inference/start'
+    route_start = "api/task/start/v1/"
     url_start = endpoint + route_start
-    global cache
-    # sequence = []
+
     payload = {
-        "apiKey" : api_key,
-        "modelKey" : model_key,
-        "modelParameters" : model_parameters,
-        "machineID" : cache['machine_id'],
-        "syncMode": sync_mode
+        "id": str(uuid4()),
+        "created": int(time.time()),
+        "data": {
+            "apiKey" : api_key,
+            "modelKey" : model_key,
+            "modelParameters" : model_parameters
+        }
     }
     response = requests.post(url_start, json=payload)
     if response.status_code != 200:
@@ -83,7 +79,9 @@ def call_start_api(api_key, model_key, model_parameters, sync_mode):
             response.status_code, response.json()['message']))
     try:
         out = response.json()
-        task_id = out['taskID']
+        if not out['success']:
+            raise Exception(f"Booste inference start call failed with message: {out.message}")
+        task_id = out['data']['taskID']
         return task_id
     except:
         raise Exception("Server error: Failed to return taskID")
@@ -91,15 +89,26 @@ def call_start_api(api_key, model_key, model_parameters, sync_mode):
 
 # The bare async checker. Used by both gpt2_sync_main (automated) and async (client called)
 # Takes in task ID, returns reformatted dict_out with Status and Output
-def call_check_api(api_key, task_id, sync_mode):
+def call_check_api(api_key, task_id):
     global endpoint
-    route_check = 'inference/check'
+    route_check = "api/task/check/v1/"
     url_check = endpoint + route_check
     # Poll server for completed task
-    payload = {"taskID": task_id, "apiKey": api_key, "syncMode": sync_mode}
+
+    payload = {
+        "id": str(uuid4()),
+        "created": int(time.time()),
+        "longPoll": True,
+        "data": {
+            "taskID": task_id, 
+            "apiKey": api_key
+        }
+    }
     response = requests.post(url_check, json=payload)
     if response.status_code != 200:
         raise Exception("Server error: Booste inference server returned status code {}\n{}".format(
             response.status_code, response.json()['message']))
     out = response.json()
+    if not out['success']:
+        raise Exception(f"Booste inference check call failed with message: {out.message}")
     return out

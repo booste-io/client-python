@@ -1,18 +1,17 @@
-import numpy as np
 import requests
 import time
 import os
 import json
 from uuid import uuid4
 
-endpoint = 'https://booste-corporation-v3-flask.zeet.app/'
+endpoint = 'https://api.booste.io/'
 # Endpoint override for development
-if 'BoosteURL' in os.environ:
+if 'BOOSTE_URL' in os.environ:
     print("Dev Mode")
-    if os.environ['BoosteURL'] == 'local':
+    if os.environ['BOOSTE_URL'] == 'local':
         endpoint = 'http://localhost/'
     else:
-        endpoint = os.environ['BoosteURL']
+        endpoint = os.environ['BOOSTE_URL']
     print("Hitting endpoint:", endpoint)
 
 
