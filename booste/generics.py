@@ -110,5 +110,6 @@ def call_check_api(api_key, task_id):
             response.status_code, response.json()['message']))
     out = response.json()
     if not out['success']:
-        raise Exception(f"Booste inference check call failed with message: {out.message}")
+        print(out)
+        raise Exception(f"Booste inference check call failed with message: {out['message']}")
     return out

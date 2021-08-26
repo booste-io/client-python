@@ -1,4 +1,4 @@
-Metadata-Version: 1.1
+Metadata-Version: 2.1
 Name: booste
 Version: 0.3.0
 Summary: The booste package is a python client to interact with your machine learning models hosted on Booste
@@ -6,7 +6,6 @@ Home-page: https://www.booste.io
 Author: Erik Dunteman
 Author-email: erik@booste.io
 License: MIT
-Description: UNKNOWN
 Keywords: Booste client,API wrapper,Booste
 Platform: UNKNOWN
 Classifier: Development Status :: 3 - Alpha
@@ -15,3 +14,6 @@ Classifier: Topic :: Software Development :: Build Tools
 Classifier: License :: OSI Approved :: MIT License
 Classifier: Programming Language :: Python :: 3.7
 Classifier: Programming Language :: Python :: 3.8
+
+UNKNOWN
+
