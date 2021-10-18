@@ -11,7 +11,13 @@ setup(
   url = 'https://www.banana.dev',
   keywords = ['Banana client', 'API wrapper', 'Banana', 'SDK'],
   setup_requires = ['wheel'],
-  install_requires=[],
+  install_requires=[
+    "certifi==2021.10.8",
+    "charset-normalizer==2.0.7",
+    "idna==3.3",
+    "requests==2.26.0",
+    "urllib3==1.26.7",
+  ],
   classifiers=[
     'Development Status :: 4 - Beta',      # Chose either "3 - Alpha", "4 - Beta" or "5 - Production/Stable" as the current state of your package
     'Intended Audience :: Developers',

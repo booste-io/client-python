@@ -6,12 +6,12 @@ from uuid import uuid4
 
 endpoint = 'https://api.booste.io/'
 # Endpoint override for development
-if 'BOOSTE_URL' in os.environ:
+if 'BANANA_URL' in os.environ:
     print("Dev Mode")
-    if os.environ['BOOSTE_URL'] == 'local':
+    if os.environ['BANANA_URL'] == 'local':
         endpoint = 'http://localhost/'
     else:
-        endpoint = os.environ['BOOSTE_URL']
+        endpoint = os.environ['BANANA_URL']
     print("Hitting endpoint:", endpoint)
 
 
@@ -36,7 +36,7 @@ client_error = {
 # ___________________________________
 
 
-def run_main(api_key, model_key, model_parameters):
+def _run_main(api_key, model_key, model_parameters):
     task_id = call_start_api(api_key, model_key, model_parameters)
     # Just hardcode intervals
     while True:
@@ -47,10 +47,10 @@ def run_main(api_key, model_key, model_parameters):
                 return dict_out['data']['taskOut']["output"]
             else:
                 return dict_out['data']['taskOut']
-def start_main(api_key, model_key, model_parameters):
+def _start_main(api_key, model_key, model_parameters):
     task_id = call_start_api(api_key, model_key, model_parameters)
     return task_id
-def check_main(api_key, task_id):
+def _check_main(api_key, task_id):
     dict_out = call_check_api(api_key, task_id)
     return dict_out
 
