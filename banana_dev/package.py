@@ -1,10 +1,10 @@
-from .generics import _run_main, _start_main, _check_main
+from .generics import run_main, start_main, check_main
 import asyncio
 import sys
 
 # Generics
 def run(api_key, model_key, model_parameters):
-    out = _run_main(
+    out = run_main(
         api_key = api_key, 
         model_key = model_key, 
         model_parameters = model_parameters
@@ -12,7 +12,7 @@ def run(api_key, model_key, model_parameters):
     return out
 
 def start(api_key, model_key, model_parameters):
-    out = _start_main(
+    out = start_main(
         api_key = api_key, 
         model_key = model_key, 
         model_parameters = model_parameters
@@ -20,7 +20,7 @@ def start(api_key, model_key, model_parameters):
     return out
     
 def check(api_key, task_id):
-    out_dict = _check_main(
+    out_dict = check_main(
         api_key = api_key,
         task_id = task_id
     )

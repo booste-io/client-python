@@ -4,7 +4,7 @@ import os
 import json
 from uuid import uuid4
 
-endpoint = 'https://api.booste.io/'
+endpoint = 'https://api.banana.dev/'
 # Endpoint override for development
 if 'BANANA_URL' in os.environ:
     print("Dev Mode")
@@ -14,29 +14,11 @@ if 'BANANA_URL' in os.environ:
         endpoint = os.environ['BANANA_URL']
     print("Hitting endpoint:", endpoint)
 
-
-# identify machine for blind use
-cache_path = os.path.abspath(os.path.join(os.path.expanduser('~'),".booste","cache.json"))
-if os.path.exists(cache_path):
-    with open(cache_path, "r") as file:
-        cache = json.load(file)
-else:
-    cache = {}
-    cache['machine_id'] = str(uuid4())
-    os.makedirs(os.path.join(os.path.expanduser('~'), ".booste"), exist_ok=True)
-    with open(cache_path, "w+") as file:
-        json.dump(cache, file)
-
-
-client_error = {
-    "OOB" : "Client error: {}={} is out of bounds.\n\tmin = {}\n\tmax = {}"
-}
-
 # THE MAIN FUNCTIONS
 # ___________________________________
 
 
-def _run_main(api_key, model_key, model_parameters):
+def run_main(api_key, model_key, model_parameters):
     task_id = call_start_api(api_key, model_key, model_parameters)
     # Just hardcode intervals
     while True:
@@ -47,10 +29,10 @@ def _run_main(api_key, model_key, model_parameters):
                 return dict_out['data']['taskOut']["output"]
             else:
                 return dict_out['data']['taskOut']
-def _start_main(api_key, model_key, model_parameters):
+def start_main(api_key, model_key, model_parameters):
     task_id = call_start_api(api_key, model_key, model_parameters)
     return task_id
-def _check_main(api_key, task_id):
+def check_main(api_key, task_id):
     dict_out = call_check_api(api_key, task_id)
     return dict_out
 
