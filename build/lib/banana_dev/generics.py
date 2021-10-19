@@ -4,7 +4,7 @@ import os
 import json
 from uuid import uuid4
 
-endpoint = 'https://api.booste.io/'
+endpoint = 'https://api.banana.dev/'
 # Endpoint override for development
 if 'BANANA_URL' in os.environ:
     print("Dev Mode")
@@ -14,43 +14,24 @@ if 'BANANA_URL' in os.environ:
         endpoint = os.environ['BANANA_URL']
     print("Hitting endpoint:", endpoint)
 
-
-# identify machine for blind use
-cache_path = os.path.abspath(os.path.join(os.path.expanduser('~'),".booste","cache.json"))
-if os.path.exists(cache_path):
-    with open(cache_path, "r") as file:
-        cache = json.load(file)
-else:
-    cache = {}
-    cache['machine_id'] = str(uuid4())
-    os.makedirs(os.path.join(os.path.expanduser('~'), ".booste"), exist_ok=True)
-    with open(cache_path, "w+") as file:
-        json.dump(cache, file)
-
-
-client_error = {
-    "OOB" : "Client error: {}={} is out of bounds.\n\tmin = {}\n\tmax = {}"
-}
-
 # THE MAIN FUNCTIONS
 # ___________________________________
 
 
-def _run_main(api_key, model_key, model_parameters):
+def run_main(api_key, model_key, model_parameters):
     task_id = call_start_api(api_key, model_key, model_parameters)
     # Just hardcode intervals
     while True:
         dict_out = call_check_api(api_key, task_id)
         if dict_out['data']['taskStatus'] == "Done":
-
             if "output" in dict_out['data']['taskOut']:
                 return dict_out['data']['taskOut']["output"]
             else:
                 return dict_out['data']['taskOut']
-def _start_main(api_key, model_key, model_parameters):
+def start_main(api_key, model_key, model_parameters):
     task_id = call_start_api(api_key, model_key, model_parameters)
     return task_id
-def _check_main(api_key, task_id):
+def check_main(api_key, task_id):
     dict_out = call_check_api(api_key, task_id)
     return dict_out
 
@@ -74,18 +55,22 @@ def call_start_api(api_key, model_key, model_parameters):
         }
     }
     response = requests.post(url_start, json=payload)
+
     if response.status_code != 200:
-        raise Exception("Server error: Booste inference server returned status code {}\n{}".format(
-            response.status_code, response.json()['message']))
+        raise Exception("server error: endpoint returned status code {}".format(response.status_code))
+
     try:
         out = response.json()
+    except:
+        raise Exception("server error: endpoint returned invalid json")
+
+    try:
         if not out['success']:
-            raise Exception(f"Booste inference start call failed with message: {out.message}")
+            raise Exception(f"server error: inference check call failed with message: {out['message']}")
         task_id = out['data']['taskID']
         return task_id
     except:
-        raise Exception("Server error: Failed to return taskID")
-
+        raise Exception("server error: Failed to return taskID")
 
 # The bare async checker. Used by both gpt2_sync_main (automated) and async (client called)
 # Takes in task ID, returns reformatted dict_out with Status and Output
@@ -105,11 +90,18 @@ def call_check_api(api_key, task_id):
         }
     }
     response = requests.post(url_check, json=payload)
+
     if response.status_code != 200:
-        raise Exception("Server error: Booste inference server returned status code {}\n{}".format(
-            response.status_code, response.json()['message']))
-    out = response.json()
-    if not out['success']:
-        print(out)
-        raise Exception(f"Booste inference check call failed with message: {out['message']}")
-    return out
+        raise Exception("server error: endpoint returned status code {}".format(response.status_code))
+
+    try:
+        out = response.json()
+    except:
+        raise Exception("server error: endpoint returned invalid json")
+        
+    try:
+        if not out['success']:
+            raise Exception(f"server error: inference check call failed with message: {out['message']}")
+        return out
+    except Exception as e:
+        raise e
