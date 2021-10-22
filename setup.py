@@ -1,32 +1,29 @@
 from distutils.core import setup
 import setuptools
 setup(
-  name = 'booste',         # How you named your package folder (MyLib)
-  packages = ['booste'],   # Chose the same as "name"
-  version = '0.3.1',      # Start with a small number and increase it with every change you make
-  license='MIT',        # Chose a license from here: https://help.github.com/articles/licensing-a-repository
-  description = 'The booste package is a python client to interact with your machine learning models hosted on Booste',   # Give a short description about your library
-  author = 'Erik Dunteman',                   # Type in your name
-  author_email = 'erik@booste.io',      # Type in your E-Mail
-  url = 'https://www.booste.io',   # Provide either the link to your github or to your website
-  keywords = ['Booste client', 'API wrapper', 'Booste'],   # Keywords that define your package best
+  name = 'banana_dev',
+  packages = ['banana_dev'],
+  version = '0.1.0',
+  license='MIT',
+  description = 'The banana package is a python client to interact with your machine learning models hosted on Banana',   # Give a short description about your library
+  author = 'Erik Dunteman',
+  author_email = 'erik@banana.dev',
+  url = 'https://www.banana.dev',
+  keywords = ['Banana client', 'API wrapper', 'Banana', 'SDK'],
   setup_requires = ['wheel'],
-  install_requires=[         # I get to this in a second
-    'certifi',
-    'chardet',
-    'idna',
-    'requests',
-    'urllib3',
-    'numpy',
-    'pillow'
-      ],
+  install_requires=[
+    "certifi==2021.10.8",
+    "charset-normalizer==2.0.7",
+    "idna==3.3",
+    "requests==2.26.0",
+    "urllib3==1.26.7",
+  ],
   classifiers=[
-    'Development Status :: 3 - Alpha',      # Chose either "3 - Alpha", "4 - Beta" or "5 - Production/Stable" as the current state of your package
-    'Intended Audience :: Developers',      # Define that your audience are developers
+    'Development Status :: 4 - Beta',      # Chose either "3 - Alpha", "4 - Beta" or "5 - Production/Stable" as the current state of your package
+    'Intended Audience :: Developers',
     'Topic :: Software Development :: Build Tools',
-    'License :: OSI Approved :: MIT License',   # Again, pick a license
+    'License :: OSI Approved :: MIT License',
     'Programming Language :: Python :: 3.7',
     'Programming Language :: Python :: 3.8',
-
   ],
 )

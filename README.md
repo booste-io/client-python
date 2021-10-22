@@ -1,1 +1,1 @@
-python client through pip as 'booste'y
+python client through pip as 'banana-dev'y
