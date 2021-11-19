@@ -44,7 +44,7 @@ def call_start_api(api_key, model_key, model_parameters, strategy):
 
     payload = {
         "id": str(uuid4()),
-        "created": int(time.time()),
+        "created": time.time(),
         "data": {
             "apiKey" : api_key,
             "modelKey" : model_key,
@@ -74,7 +74,7 @@ def call_start_api(api_key, model_key, model_parameters, strategy):
 # Takes in task ID, returns reformatted dict_out with Status and Output
 def call_check_api(api_key, task_id):
     global endpoint
-    route_check = "api/task/check/v1/"
+    route_check = "api/task/check/v2/"
     url_check = endpoint + route_check
     # Poll server for completed task
 
