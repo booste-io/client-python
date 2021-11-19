@@ -3,7 +3,7 @@ import setuptools
 setup(
   name = 'banana_dev',
   packages = ['banana_dev'],
-  version = '0.1.0',
+  version = '1.0.0',
   license='MIT',
   description = 'The banana package is a python client to interact with your machine learning models hosted on Banana',   # Give a short description about your library
   author = 'Erik Dunteman',

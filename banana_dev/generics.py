@@ -18,18 +18,15 @@ if 'BANANA_URL' in os.environ:
 # ___________________________________
 
 
-def run_main(api_key, model_key, model_parameters):
-    task_id = call_start_api(api_key, model_key, model_parameters)
+def run_main(api_key, model_key, model_parameters, strategy):
+    task_id = call_start_api(api_key, model_key, model_parameters, strategy)
     # Just hardcode intervals
     while True:
         dict_out = call_check_api(api_key, task_id)
         if dict_out['data']['taskStatus'] == "Done":
-            if "output" in dict_out['data']['taskOut']:
-                return dict_out['data']['taskOut']["output"]
-            else:
-                return dict_out['data']['taskOut']
-def start_main(api_key, model_key, model_parameters):
-    task_id = call_start_api(api_key, model_key, model_parameters)
+            return dict_out['data']['taskOut']
+def start_main(api_key, model_key, model_parameters, strategy):
+    task_id = call_start_api(api_key, model_key, model_parameters, strategy)
     return task_id
 def check_main(api_key, task_id):
     dict_out = call_check_api(api_key, task_id)
@@ -40,9 +37,9 @@ def check_main(api_key, task_id):
 # ________________________
 
 # Takes in start params, returns task ID
-def call_start_api(api_key, model_key, model_parameters):
+def call_start_api(api_key, model_key, model_parameters, strategy):
     global endpoint
-    route_start = "api/task/start/v1/"
+    route_start = "api/task/start/v2/"
     url_start = endpoint + route_start
 
     payload = {
@@ -51,7 +48,8 @@ def call_start_api(api_key, model_key, model_parameters):
         "data": {
             "apiKey" : api_key,
             "modelKey" : model_key,
-            "modelParameters" : model_parameters
+            "modelParameters" : model_parameters,
+            "strategy": strategy,
         }
     }
     response = requests.post(url_start, json=payload)
