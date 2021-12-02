@@ -1,22 +1,20 @@
 from .generics import run_main, start_main, check_main
-import asyncio
-import sys
 
 # Generics
-def run(api_key, model_key, model_parameters, strategy = {}):
+def run(api_key, model_key, model_inputs, strategy = {}):
     out = run_main(
         api_key = api_key, 
         model_key = model_key, 
-        model_parameters = model_parameters,
+        model_inputs = model_inputs,
         strategy = strategy,
     )
     return out
 
-def start(api_key, model_key, model_parameters, strategy = {}):
+def start(api_key, model_key, model_inputs, strategy = {}):
     out = start_main(
         api_key = api_key, 
         model_key = model_key, 
-        model_parameters = model_parameters,
+        model_inputs = model_inputs,
         strategy = strategy,
     )
     return out

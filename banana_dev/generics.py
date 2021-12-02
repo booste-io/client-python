@@ -18,63 +18,62 @@ if 'BANANA_URL' in os.environ:
 # ___________________________________
 
 
-def run_main(api_key, model_key, model_parameters, strategy):
-    task_id = call_start_api(api_key, model_key, model_parameters, strategy)
-    # Just hardcode intervals
+def run_main(api_key, model_key, model_inputs, strategy):
+    call_id = start_api(api_key, model_key, model_inputs, strategy)
     while True:
-        dict_out = call_check_api(api_key, task_id)
-        if dict_out['data']['taskStatus'] == "Done":
-            return dict_out['data']['taskOut']
-def start_main(api_key, model_key, model_parameters, strategy):
-    task_id = call_start_api(api_key, model_key, model_parameters, strategy)
-    return task_id
-def check_main(api_key, task_id):
-    dict_out = call_check_api(api_key, task_id)
+        dict_out = check_api(api_key, call_id)
+        if dict_out['message'].lower() == "success":
+            return dict_out
+
+def start_main(api_key, model_key, model_inputs, strategy):
+    call_id = start_api(api_key, model_key, model_inputs, strategy)
+    return call_id
+
+def check_main(api_key, call_id):
+    dict_out = check_api(api_key, call_id)
     return dict_out
 
 
 # THE API CALLING FUNCTIONS
 # ________________________
 
-# Takes in start params, returns task ID
-def call_start_api(api_key, model_key, model_parameters, strategy):
+# Takes in start params, returns call ID
+def start_api(api_key, model_key, model_inputs, strategy):
     global endpoint
-    route_start = "api/task/start/v2/"
+    route_start = "start/v2/"
     url_start = endpoint + route_start
 
     payload = {
         "id": str(uuid4()),
         "created": time.time(),
-        "data": {
-            "apiKey" : api_key,
-            "modelKey" : model_key,
-            "modelParameters" : model_parameters,
-            "strategy": strategy,
-        }
+        "apiKey" : api_key,
+        "modelKey" : model_key,
+        "modelInputs" : model_inputs,
+        "strategy": strategy,
     }
+
     response = requests.post(url_start, json=payload)
 
     if response.status_code != 200:
-        raise Exception("server error: endpoint returned status code {}".format(response.status_code))
+        raise Exception("server error: status code {}".format(response.status_code))
 
     try:
         out = response.json()
     except:
-        raise Exception("server error: endpoint returned invalid json")
+        raise Exception("server error: returned invalid json")
 
     try:
-        if not out['success']:
-            raise Exception(f"server error: inference check call failed with message: {out['message']}")
-        task_id = out['data']['taskID']
-        return task_id
+        if "error" in out['message'].lower():
+            raise Exception(out['message'])
+        call_id = out['callID']
+        return call_id
     except:
-        raise Exception("server error: Failed to return taskID")
+        raise Exception("server error: Failed to return call_id")
 
-# The bare async checker. Used by both gpt2_sync_main (automated) and async (client called)
-# Takes in task ID, returns reformatted dict_out with Status and Output
-def call_check_api(api_key, task_id):
+# The bare async checker.
+def check_api(api_key, call_id):
     global endpoint
-    route_check = "api/task/check/v2/"
+    route_check = "check/v2/"
     url_check = endpoint + route_check
     # Poll server for completed task
 
@@ -82,24 +81,22 @@ def call_check_api(api_key, task_id):
         "id": str(uuid4()),
         "created": int(time.time()),
         "longPoll": True,
-        "data": {
-            "taskID": task_id, 
-            "apiKey": api_key
-        }
+        "callID": call_id, 
+        "apiKey": api_key
     }
     response = requests.post(url_check, json=payload)
 
     if response.status_code != 200:
-        raise Exception("server error: endpoint returned status code {}".format(response.status_code))
+        raise Exception("server error: status code {}".format(response.status_code))
 
     try:
         out = response.json()
     except:
-        raise Exception("server error: endpoint returned invalid json")
-        
+        raise Exception("server error: returned invalid json")
+
     try:
-        if not out['success']:
-            raise Exception(f"server error: inference check call failed with message: {out['message']}")
+        if "error" in out['message'].lower():
+            raise Exception(out['message'])
         return out
     except Exception as e:
         raise e
