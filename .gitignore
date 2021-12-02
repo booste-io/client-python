@@ -4,6 +4,9 @@ dist/*
 .egg
 .pyc
 __pycache__
+banana_dev.egg-info
+build
+dist
 
 # testing files
 demo*

@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: banana-dev
-Version: 0.1.0
+Version: 1.0.0
 Summary: The banana package is a python client to interact with your machine learning models hosted on Banana
 Home-page: https://www.banana.dev
 Author: Erik Dunteman

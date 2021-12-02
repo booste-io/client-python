@@ -3,7 +3,7 @@ import setuptools
 setup(
   name = 'banana_dev',
   packages = ['banana_dev'],
-  version = '0.1.0',
+  version = '2.0.0',
   license='MIT',
   description = 'The banana package is a python client to interact with your machine learning models hosted on Banana',   # Give a short description about your library
   author = 'Erik Dunteman',
@@ -19,7 +19,7 @@ setup(
     "urllib3==1.26.7",
   ],
   classifiers=[
-    'Development Status :: 4 - Beta',      # Chose either "3 - Alpha", "4 - Beta" or "5 - Production/Stable" as the current state of your package
+    'Development Status :: 5 - Production/Stable',      # Chose either "3 - Alpha", "4 - Beta" or "5 - Production/Stable" as the current state of your package
     'Intended Audience :: Developers',
     'Topic :: Software Development :: Build Tools',
     'License :: OSI Approved :: MIT License',
