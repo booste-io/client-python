@@ -1,11 +1,18 @@
 from distutils.core import setup
 import setuptools
+from pathlib import Path
+
+this_directory = Path(__file__).parent
+long_description = (this_directory / "README.md").read_text()
+
 setup(
   name = 'banana_dev',
   packages = ['banana_dev'],
-  version = '2.0.0',
+  version = '2.0.2',
   license='MIT',
   description = 'The banana package is a python client to interact with your machine learning models hosted on Banana',   # Give a short description about your library
+  long_description=long_description,
+  long_description_content_type='text/markdown',
   author = 'Erik Dunteman',
   author_email = 'erik@banana.dev',
   url = 'https://www.banana.dev',
