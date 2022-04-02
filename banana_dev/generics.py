@@ -4,14 +4,15 @@ import os
 import json
 from uuid import uuid4
 
-endpoint = 'https://api.banana.dev/'
 # Endpoint override for development
-if 'BANANA_URL' in os.environ:
-    print("Dev Mode")
-    if os.environ['BANANA_URL'] == 'local':
+endpoint = 'https://api.banana.dev/'
+if 'STAGE' in os.environ:
+    if os.environ['STAGE'] == 'local':
         endpoint = 'http://localhost/'
+    elif os.environ['STAGE'] == 'dev':
+        endpoint = "https://banana-inference-api-manager-dev.zeet-banana.zeet.app"
     else:
-        endpoint = os.environ['BANANA_URL']
+        endpoint = 'https://api.banana.dev/'
     print("Hitting endpoint:", endpoint)
 
 # THE MAIN FUNCTIONS
