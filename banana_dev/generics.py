@@ -1,46 +1,53 @@
+from glob import glob
 import requests
 import time
 import os
 import json
 from uuid import uuid4
 
-endpoint = 'https://api.banana.dev/'
-verbosity = False
-'''
-# Endpoint override for development
-if 'BANANA_URL' in os.environ:
-    print("Dev Mode")
-    if os.environ['BANANA_URL'] == 'local':
-        endpoint = 'http://localhost/'
-    else:
-        endpoint = os.environ['BANANA_URL']
-    print("Hitting endpoint:", endpoint)
-'''
-# Endpoint override and custom config for development
-def custom_config(**config):
-    if config is None or config.__len__==0:
-        return 
+# Constants
+# Default config
+ENDPOINT = 'https://api.banana.dev/'
+VERBOSITY = False
 
-    if 'url' in config: 
+# Globals
+# Config
+endpoint = ENDPOINT
+verbosity = VERBOSITY
+
+# Custom config for development
+def custom_config(**config):
+    if config.__len__() != 0:
         print('Dev Mode: custom config')
-        global endpoint
+
+    # Set custom values else revert to default
+    global endpoint
+    if 'url' not in config: 
+        endpoint = ENDPOINT
+    else:
         url = config.get('url')
         if url  == 'local':
             endpoint = 'http://localhost/'
         else:
             endpoint = url
-        print(f'Hitting endpoint: {url}')
-    if 'verbosity' in config: 
-        global verbosity
-        verbosity = config.get('verbosity').lower == 'true'
+    
+    global verbosity
+    if 'verbosity' not in config: 
+        verbosity = VERBOSITY
+    else:
+        verbosity = config.get('verbosity').lower() == 'true'
 
+    # Print all config if any setting has been customized
+    if config.__len__() != 0:
+        print(f'url: {endpoint}')
+        print(f'verbosity: {verbosity}')
+        
     
 # THE MAIN FUNCTIONS
 # ___________________________________
 
 def run_main(api_key, model_key, model_inputs, strategy, **config):
-    if config.__len__ != 0:
-        custom_config(**config)
+    custom_config(**config)
 
     call_id = start_api(api_key, model_key, model_inputs, strategy)
     while True:
