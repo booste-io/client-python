@@ -5,6 +5,8 @@ import json
 from uuid import uuid4
 
 endpoint = 'https://api.banana.dev/'
+verbosity = False
+'''
 # Endpoint override for development
 if 'BANANA_URL' in os.environ:
     print("Dev Mode")
@@ -13,12 +15,33 @@ if 'BANANA_URL' in os.environ:
     else:
         endpoint = os.environ['BANANA_URL']
     print("Hitting endpoint:", endpoint)
+'''
+# Endpoint override and custom config for development
+def custom_config(**config):
+    if config is None or config.__len__==0:
+        return 
 
+    if 'url' in config: 
+        print('Dev Mode: custom config')
+        global endpoint
+        url = config.get('url')
+        if url  == 'local':
+            endpoint = 'http://localhost/'
+        else:
+            endpoint = url
+        print(f'Hitting endpoint: {url}')
+    if 'verbosity' in config: 
+        global verbosity
+        verbosity = config.get('verbosity').lower == 'true'
+
+    
 # THE MAIN FUNCTIONS
 # ___________________________________
 
+def run_main(api_key, model_key, model_inputs, strategy, **config):
+    if config.__len__ != 0:
+        custom_config(**config)
 
-def run_main(api_key, model_key, model_inputs, strategy):
     call_id = start_api(api_key, model_key, model_inputs, strategy)
     while True:
         dict_out = check_api(api_key, call_id)

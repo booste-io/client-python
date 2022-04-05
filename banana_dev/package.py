@@ -1,13 +1,14 @@
 from .generics import run_main, start_main, check_main
 
 # Generics
-def run(api_key, model_key, model_inputs, strategy = {}):
+def run(api_key, model_key, model_inputs, strategy = {}, **config):
     out = run_main(
         api_key = api_key, 
         model_key = model_key, 
         model_inputs = model_inputs,
         strategy = strategy,
-    )
+        **config
+    )   
     return out
 
 def start(api_key, model_key, model_inputs, strategy = {}):
