@@ -15,16 +15,25 @@ VERBOSITY = False
 endpoint = ENDPOINT
 verbosity = VERBOSITY
 
+# Reset config to defaults
+def reset_config():
+    global endpoint
+    global verbosity
+    endpoint = ENDPOINT
+    verbosity = VERBOSITY
+
 # Custom config for development
 def custom_config(**config):
+    reset_config()
+
     if config.__len__() != 0:
         print('Dev Mode: custom config')
-
+    else:
+        return
+    
     # Set custom values else revert to default
     global endpoint
-    if 'url' not in config: 
-        endpoint = ENDPOINT
-    else:
+    if 'url' in config: 
         url = config.get('url')
         if url  == 'local':
             endpoint = 'http://localhost/'
@@ -32,16 +41,11 @@ def custom_config(**config):
             endpoint = url
     
     global verbosity
-    if 'verbosity' not in config: 
-        verbosity = VERBOSITY
-    else:
+    if 'verbosity' in config: 
         verbosity = config.get('verbosity').lower() == 'true'
 
-    # Print all config if any setting has been customized
-    if config.__len__() != 0:
-        print(f'url: {endpoint}')
-        print(f'verbosity: {verbosity}')
-        
+    print(f'url: {endpoint}')
+    print(f'verbosity: {verbosity}')
     
 # THE MAIN FUNCTIONS
 # ___________________________________
