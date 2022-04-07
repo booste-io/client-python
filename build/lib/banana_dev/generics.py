@@ -3,6 +3,7 @@ import time
 import os
 import json
 from uuid import uuid4
+import copy
 
 endpoint = 'https://api.banana.dev/'
 # Endpoint override for development

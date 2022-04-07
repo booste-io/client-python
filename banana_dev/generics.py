@@ -4,6 +4,7 @@ import time
 import os
 import json
 from uuid import uuid4
+from copy import deepcopy
 
 # Constants
 # Default config
@@ -157,11 +158,11 @@ def check_api(api_key, call_id):
     try:
         out = response.json()
         try:
-            out_log = out.copy()
-            out['modelOutputs'][0]['output']='-hidden by log_it-'
+            out_log = deepcopy(out)
+            out_log['modelOutputs'][0]['output']='-hidden by log_it-'
             log_it('check_api loop',out_log)
         except:
-            log_it('check_api loop',out_log)
+            log_it('check_api loop',out)
 
     except:
         raise Exception("server error: returned invalid json")
