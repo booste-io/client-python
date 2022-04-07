@@ -28,7 +28,7 @@ def log_it(desc:str, body:str=None):
     if log_time0 is None: 
         log_time0 = time.time()
         log_time_prev = log_time0
-        print('time | total time | split')
+        print('time | duration | split')
     
     # Subsequent calls
     log_time = time.time()
