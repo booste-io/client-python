@@ -25,7 +25,7 @@ def log_it(desc:str, body:str=None):
     # First call    
     global log_time0
     global log_time_prev
-    if log_time0 is None: 
+    if desc =='start':
         log_time0 = time.time()
         log_time_prev = log_time0
         print('time | duration | split')
