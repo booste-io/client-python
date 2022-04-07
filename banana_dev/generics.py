@@ -12,8 +12,33 @@ VERBOSITY = False
 
 # Globals
 # Config
-endpoint = ENDPOINT
-verbosity = VERBOSITY
+endpoint = None
+verbosity = None
+log_time0 = None
+log_time_prev = None
+
+# Log util
+def log_it(desc:str, body:str=None):
+    if not verbosity:
+        return 
+
+    # First call    
+    global log_time0
+    global log_time_prev
+    if log_time0 is None: 
+        log_time0 = time.time()
+        log_time_prev = log_time0
+        print('time | total time | split')
+    
+    # Subsequent calls
+    log_time = time.time()
+    clock = time.localtime(log_time)
+    timer = log_time - log_time0
+    split = log_time - log_time_prev
+    log_time_prev = log_time
+    print(f'{time.strftime("%H:%M:%S", clock)} {time.strftime("%M:%S", time.gmtime(timer))} {split:.2f} - {desc}')
+    if body:
+        print(body)
 
 # Reset config to defaults
 def reset_config():
@@ -42,10 +67,13 @@ def custom_config(**config):
     
     global verbosity
     if 'verbosity' in config: 
-        verbosity = config.get('verbosity').lower() == 'true'
+        verbosity = config.get('verbosity').lower() == 'true'    
 
     print(f'url: {endpoint}')
     print(f'verbosity: {verbosity}')
+
+    if verbosity:
+        log_it(desc='start')
     
 # THE MAIN FUNCTIONS
 # ___________________________________
@@ -54,9 +82,12 @@ def run_main(api_key, model_key, model_inputs, strategy, **config):
     custom_config(**config)
 
     call_id = start_api(api_key, model_key, model_inputs, strategy)
+    log_it(f'call_id: {call_id}')
+
     while True:
         dict_out = check_api(api_key, call_id)
         if dict_out['message'].lower() == "success":
+            log_it(f'end')
             return dict_out
 
 def start_main(api_key, model_key, model_inputs, strategy):
@@ -125,6 +156,13 @@ def check_api(api_key, call_id):
 
     try:
         out = response.json()
+        try:
+            out_log = out.copy()
+            out['modelOutputs'][0]['output']='-hidden by log_it-'
+            log_it('check_api loop',out_log)
+        except:
+            log_it('check_api loop',out_log)
+
     except:
         raise Exception("server error: returned invalid json")
 
