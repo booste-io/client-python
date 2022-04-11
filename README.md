@@ -25,7 +25,7 @@ print(out)
 ```
 
 Return type:
-```json
+```python
 {
     {
         "id": "12345678-1234-1234-1234-123456789012", 
@@ -34,7 +34,7 @@ Return type:
         "apiVersion": "26 Nov 2021", 
         "modelOutputs": [
             {
-                // a json specific to your model. In this example, the sum of "a" and "b" from the above model_parameters
+                # a json specific to your model. In this example, the sum of "a" and "b" from the above model_parameters
                 "sum": 3, 
             }
         ]
