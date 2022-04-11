@@ -40,6 +40,7 @@ Return type:
         ]
     }
 }
+```
 
 Parse the server output:
 ```python
