@@ -1,3 +1,47 @@
 # Banana Python SDK
 
-Note: Version 2.0.0 is a breaking API change over all prior versions. Revert to 0.1.0 if issues arise.
+### Getting Started
+
+Install via pip
+`pip3 install banana-dev`
+
+Get your API Key
+- [Sign in / log in here](https://app.banana.dev)
+
+Run:
+```python
+import banana_dev as banana
+
+api_key = "YOUR_API_KEY"
+model_key = "YOUR_MODEL_KEY"
+model_parameters = {
+    # a json specific to your model. For example:
+    "a": 1,
+    "b": 2
+}
+
+out = banana.run(api_key, model_key, model_parameters)
+print(out)
+```
+
+Return type:
+```json
+{
+    {
+        "id": "12345678-1234-1234-1234-123456789012", 
+        "message": "success", 
+        "created": 1649712752, 
+        "apiVersion": "26 Nov 2021", 
+        "modelOutputs": [
+            {
+                // a json specific to your model. In this example, the sum of "a" and "b" from the above model_parameters
+                "sum": 3, 
+            }
+        ]
+    }
+}
+
+Parse the server output:
+```python
+model_out = out["modelOutputs"][0]
+```
