@@ -4,6 +4,8 @@ import os
 import json
 from uuid import uuid4
 
+from .config import load_config
+
 endpoint = 'https://api.banana.dev/'
 # Endpoint override for development
 if 'BANANA_URL' in os.environ:
@@ -14,19 +16,21 @@ if 'BANANA_URL' in os.environ:
         endpoint = os.environ['BANANA_URL']
     print("Hitting endpoint:", endpoint)
 
+config = load_config()
+
 # THE MAIN FUNCTIONS
 # ___________________________________
 
 
-def run_main(api_key, model_key, model_inputs, strategy):
-    call_id = start_api(api_key, model_key, model_inputs, strategy)
+def run_main(api_key, model_key, model_inputs):
+    call_id = start_api(api_key, model_key, model_inputs)
     while True:
         dict_out = check_api(api_key, call_id)
         if dict_out['message'].lower() == "success":
             return dict_out
 
-def start_main(api_key, model_key, model_inputs, strategy):
-    call_id = start_api(api_key, model_key, model_inputs, strategy)
+def start_main(api_key, model_key, model_inputs):
+    call_id = start_api(api_key, model_key, model_inputs)
     return call_id
 
 def check_main(api_key, call_id):
@@ -38,8 +42,9 @@ def check_main(api_key, call_id):
 # ________________________
 
 # Takes in start params, returns call ID
-def start_api(api_key, model_key, model_inputs, strategy):
+def start_api(api_key, model_key, model_inputs):
     global endpoint
+    global config
     route_start = "start/v2/"
     url_start = endpoint + route_start
 
@@ -49,7 +54,7 @@ def start_api(api_key, model_key, model_inputs, strategy):
         "apiKey" : api_key,
         "modelKey" : model_key,
         "modelInputs" : model_inputs,
-        "strategy": strategy,
+        "config": config
     }
 
     response = requests.post(url_start, json=payload)

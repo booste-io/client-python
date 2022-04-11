@@ -14,13 +14,13 @@ import banana_dev as banana
 
 api_key = "YOUR_API_KEY"
 model_key = "YOUR_MODEL_KEY"
-model_parameters = {
+model_inputs = {
     # a json specific to your model. For example:
     "a": 1,
     "b": 2
 }
 
-out = banana.run(api_key, model_key, model_parameters)
+out = banana.run(api_key, model_key, model_inputs)
 print(out)
 ```
 
